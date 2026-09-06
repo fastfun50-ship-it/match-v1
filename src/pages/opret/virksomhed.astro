@@ -1,0 +1,107 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { spor, omraader } from '../../data/v1-lister';
+---
+<Layout title="Beskriv behov — Match for virksomheder" description="Beskriv dit behov. Vi matcher dig med den rigtige vikar.">
+  <section class="page-hero">
+    <div class="container">
+      <h1>Beskriv dit behov</h1>
+      <p style="opacity:0.9;">Vælg spor og område — så finder vi det rigtige match.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <form class="card form-card" method="get" action="/tak" data-flow="virksomhed">
+        <input type="hidden" name="lead-kilde" value="opret-virksomhed" />
+
+        <label for="firmanavn">Firmanavn</label>
+        <input id="firmanavn" name="firmanavn" type="text" required autocomplete="organization" />
+
+        <label for="cvr">CVR <span class="muted">(valgfrit)</span></label>
+        <input id="cvr" name="cvr" type="text" inputmode="numeric" autocomplete="off" placeholder="" />
+
+        <label for="navn">Kontaktperson</label>
+        <input id="navn" name="navn" type="text" required autocomplete="name" />
+
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required autocomplete="email" />
+
+        <label for="telefon">Telefon</label>
+        <input id="telefon" name="telefon" type="tel" required autocomplete="tel" />
+
+        <fieldset class="bevis-fieldset">
+          <legend>Spor behov</legend>
+          <p class="muted" style="margin-top:0;">Vælg ét eller flere.</p>
+          <div class="spor-multi">
+            {spor.map((s) => (
+              <label class="check-line">
+                <input type="checkbox" name="spor_behov" value={s.key} data-spor={s.key} />
+                <span>{s.label}</span>
+              </label>
+            ))}
+          </div>
+          <div id="spor-uddyb-wrap" class="uddyb-wrap" hidden>
+            <label for="spor_uddyb">Uddyb andet</label>
+            <input id="spor_uddyb" name="spor_uddyb" type="text" />
+          </div>
+        </fieldset>
+
+        <label for="omraade">Område</label>
+        <select id="omraade" name="omraade" required>
+          <option value="">Vælg område</option>
+          {omraader.map((o) => <option value={o.key}>{o.label}</option>)}
+        </select>
+        <div id="omraade-uddyb-wrap" class="uddyb-wrap" hidden>
+          <label for="omraade_uddyb">Uddyb område</label>
+          <input id="omraade_uddyb" name="omraade_uddyb" type="text" />
+        </div>
+
+        <label for="besked">Besked <span class="muted">(valgfrit)</span></label>
+        <textarea id="besked" name="besked" rows="3" placeholder="Kun hvis noget vigtigt mangler"></textarea>
+
+        <div class="checkbox-row">
+          <input id="samtykke" name="samtykke" type="checkbox" required />
+          <label for="samtykke">Jeg giver samtykke til, at Match behandler oplysningerne for at matche os med vikarer. Se <a href="/privatliv">privatlivspolitik</a>.</label>
+        </div>
+
+        <button class="btn btn-signal" type="submit">Send behov</button>
+      </form>
+    </div>
+  </section>
+  <script>
+    const form = document.querySelector('form[data-flow="virksomhed"]');
+    const omraadeEl = document.getElementById('omraade');
+    const omraadeUddyb = document.getElementById('omraade-uddyb-wrap');
+    const sporUddyb = document.getElementById('spor-uddyb-wrap');
+    const andetBox = form?.querySelector('input[data-spor="andet"]');
+
+    function toggleAndetOmraade() {
+      const isAndet = omraadeEl.value === 'andet';
+      omraadeUddyb.hidden = !isAndet;
+      const input = document.getElementById('omraade_uddyb');
+      if (input) input.required = isAndet;
+      if (!isAndet && input) input.value = '';
+    }
+
+    function toggleAndetSpor() {
+      const on = !!(andetBox && andetBox.checked);
+      sporUddyb.hidden = !on;
+      const input = document.getElementById('spor_uddyb');
+      if (input) input.required = on;
+      if (!on && input) input.value = '';
+    }
+
+    omraadeEl?.addEventListener('change', toggleAndetOmraade);
+    andetBox?.addEventListener('change', toggleAndetSpor);
+
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const checked = form.querySelectorAll('input[name="spor_behov"]:checked');
+      if (!checked.length) {
+        alert('Vælg mindst ét spor.');
+        return;
+      }
+      window.location.href = '/tak?fra=virksomhed';
+    });
+  </script>
+</Layout>

@@ -1,0 +1,134 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Match — mennesker der har det godt, arbejder bedre">
+  <section class="hero-bleed" aria-label="Forside hero">
+    <img
+      class="hero-bleed__img"
+      src="/images/bygge/hero-gruppe-12.jpg"
+      alt="Mennesker i arbejde — trygt og værdigt"
+      width="2400"
+      height="1350"
+      fetchpriority="high"
+    />
+    <div class="hero-bleed__overlay hero-bleed__overlay--text"></div>
+    <div class="hero-bleed__content container">
+      <h1>Mennesker der har det godt, arbejder bedre.</h1>
+      <p class="hero-lead">
+        Vi matcher vikarer og virksomheder — trygt og enkelt.
+      </p>
+      <div class="hero-ctas">
+        <a class="btn btn-signal" href="/virksomheder">Find vikar</a>
+        <a class="btn btn-sol" href="/vikarer">Find job</a>
+      </div>
+    </div>
+  </section>
+  <section class="plakat-split" aria-label="Find vikar eller find job">
+    <a class="plakat plakat--signal" href="/virksomheder">
+      <span class="plakat-deco plakat-deco--dots-tl" aria-hidden="true"></span>
+      <svg class="plakat-deco plakat-deco--wave" viewBox="0 0 220 70" aria-hidden="true" focusable="false">
+        <path d="M8 42 C 38 8, 58 68, 92 38 S 148 6, 178 40 S 208 58, 214 32" fill="none" stroke="rgba(255,255,255,0.88)" stroke-width="4.5" stroke-linecap="round"/>
+      </svg>
+      <svg class="plakat-deco plakat-deco--arc" viewBox="0 0 120 100" aria-hidden="true" focusable="false">
+        <path d="M18 78 C 28 28, 88 18, 102 52" fill="none" stroke="rgba(255,255,255,0.92)" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M90 42 L102 52 L88 58" fill="none" stroke="rgba(255,255,255,0.92)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="plakat__inner">
+        <div class="plakat__copy">
+          <p class="plakat__kicker">Til virksomheder</p>
+          <h2 class="plakat__title">Find vikar</h2>
+          <p class="plakat__lead">Vi matcher jer med den rigtige person til jeres behov.</p>
+          <p class="plakat__lead">Trygt, enkelt og uden at I selv skal lede.</p>
+          <span class="btn btn-on-signal">Find vikar</span>
+          <ul class="plakat__points">
+            <li>
+              <strong>Beskriv jeres behov</strong>
+              <span class="plakat__sub">Vi kender jeres branche og behov.</span>
+            </li>
+            <li>
+              <strong>Vi finder det rigtige match</strong>
+              <span class="plakat__sub">Hurtigt match når I har brug for det.</span>
+            </li>
+            <li>
+              <strong>I siger ja — før der sker noget</strong>
+              <span class="plakat__sub">Op og ned efter jeres behov.</span>
+            </li>
+          </ul>
+        </div>
+        <div class="plakat__circle" aria-hidden="true">
+          <img src="/images/circles/circle-plejehjem-01.png" alt="" width="800" height="800" loading="lazy" />
+        </div>
+      </div>
+    </a>
+    <a class="plakat plakat--sol" href="/vikarer">
+      <span class="plakat-deco plakat-deco--dots-tr" aria-hidden="true"></span>
+      <span class="plakat-deco plakat-deco--dots-br" aria-hidden="true"></span>
+      <svg class="plakat-deco plakat-deco--loop" viewBox="0 0 240 80" aria-hidden="true" focusable="false">
+        <path d="M10 48 C 28 12, 52 70, 78 40 C 98 18, 112 62, 138 36 C 158 18, 172 66, 198 42 C 212 30, 224 52, 232 40" fill="none" stroke="rgba(11,16,32,0.78)" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <div class="plakat__inner">
+        <div class="plakat__copy">
+          <p class="plakat__kicker">Til vikarer</p>
+          <h2 class="plakat__title">Find job</h2>
+          <p class="plakat__lead">Vi matcher dig med virksomheder, der har brug for dig.</p>
+          <p class="plakat__lead">Du beholder dig selv — vi finder det rigtige match.</p>
+          <span class="btn btn-on-sol">Find job</span>
+          <ul class="plakat__points">
+            <li>
+              <strong>Opret dig på få minutter</strong>
+              <span class="plakat__sub">Klar aftale og tryg dialog.</span>
+            </li>
+            <li>
+              <strong>Vi matcher på fag og område</strong>
+              <span class="plakat__sub">Vælg opgaver, der passer dig.</span>
+            </li>
+            <li>
+              <strong>Du vælger, om det passer</strong>
+              <span class="plakat__sub">Match der udvikler dig.</span>
+            </li>
+          </ul>
+        </div>
+        <div class="plakat__circle" aria-hidden="true">
+          <img src="/images/circles/circle-sosu-helper-01.png" alt="" width="800" height="800" loading="lazy" />
+        </div>
+      </div>
+    </a>
+  </section>
+
+  <section class="branche-section" aria-label="Branche-eksempler">
+    <div class="container">
+      <h2>Brancher — eksempler</h2>
+      <p class="muted">Eksempler på områder vi ofte matcher i. Ikke en dækningsgaranti.</p>
+    </div>
+    <div class="branche-grid branche-grid--large">
+      <figure class="branche-card branche-card--large">
+        <picture>
+          <source media="(max-width: 640px)" srcset="/images/sosu/branche-sosu-kaffe.jpg" />
+          <img src="/images/sosu/branche-sosu-kaffe.jpg" alt="SOSU — eksempel" width="1600" height="1200" loading="lazy" />
+        </picture>
+        <figcaption>SOSU</figcaption>
+      </figure>
+      <figure class="branche-card branche-card--large">
+        <picture>
+          <source media="(max-width: 640px)" srcset="/images/bygge/branche-bygge-plan.jpg" />
+          <img src="/images/bygge/branche-bygge-plan.jpg" alt="Bygge — eksempel" width="1600" height="1200" loading="lazy" />
+        </picture>
+        <figcaption>Bygge</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="process-navy" aria-label="Sådan matcher vi">
+    <div class="container">
+      <h2>Sådan matcher vi</h2>
+      <ol class="steps steps--navy">
+        <li><strong>Beskriv dit behov</strong> — virksomhed eller vikar fortæller, hvad der er vigtigt.</li>
+        <li><strong>Vi matcher</strong> — kompetencer, område og timing.</li>
+        <li><strong>I mødes</strong> — begge parter siger ja, før der sker noget.</li>
+      </ol>
+      <p style="margin-top:1.5rem;">
+        <a class="btn btn-sol" href="/jobs">Se jobs</a>
+      </p>
+    </div>
+  </section>
+</Layout>

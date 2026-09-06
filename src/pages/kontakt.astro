@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Kontakt — Match" description="Kontakt Match. Send en besked — udkast uden rigtig backend.">
+  <section class="page-hero">
+    <div class="container">
+      <h1>Kontakt</h1>
+      <p style="opacity:0.9;">Skriv til os. Denne formular er en stub uden rigtig backend.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <form class="card form-card" method="get" action="/tak" data-flow="kontakt">
+        <input type="hidden" name="lead-kilde" value="kontakt" />
+        <label for="navn">Navn</label>
+        <input id="navn" name="navn" type="text" required />
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required />
+        <label for="besked">Besked</label>
+        <textarea id="besked" name="besked" rows="5" required></textarea>
+        <button class="btn btn-navy" type="submit">Send besked</button>
+      </form>
+    </div>
+  </section>
+  <script>
+    document.querySelector('form[data-flow="kontakt"]')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      window.location.href = '/tak?fra=kontakt';
+    });
+  </script>
+</Layout>

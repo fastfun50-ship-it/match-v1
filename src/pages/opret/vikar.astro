@@ -1,0 +1,168 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { spor, omraader, niveauer, beviser, start, bevisSvar } from '../../data/v1-lister';
+---
+<Layout title="Opret dig som vikar — Match" description="Opret dig. Vi matcher dig med virksomheder. Ingen CPR, ingen CV-upload.">
+  <section class="page-hero">
+    <div class="container">
+      <h1>Opret dig</h1>
+      <p style="opacity:0.9;">Vælg spor og område — så kan vi matche dig. Ingen CPR. Ingen upload.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <form class="card form-card" method="get" action="/tak" data-flow="vikar">
+        <input type="hidden" name="lead-kilde" value="opret-vikar" />
+
+        <label for="fornavn">Fornavn</label>
+        <input id="fornavn" name="fornavn" type="text" required autocomplete="given-name" />
+
+        <label for="efternavn">Efternavn</label>
+        <input id="efternavn" name="efternavn" type="text" required autocomplete="family-name" />
+
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required autocomplete="email" />
+
+        <label for="telefon">Telefon</label>
+        <input id="telefon" name="telefon" type="tel" required autocomplete="tel" />
+
+        <label for="spor">Spor</label>
+        <select id="spor" name="spor" required>
+          <option value="">Vælg spor</option>
+          {spor.map((s) => <option value={s.key}>{s.label}</option>)}
+        </select>
+        <div id="spor-uddyb-wrap" class="uddyb-wrap" hidden>
+          <label for="spor_uddyb">Uddyb spor</label>
+          <input id="spor_uddyb" name="spor_uddyb" type="text" />
+        </div>
+
+        <label for="omraade">Område</label>
+        <select id="omraade" name="omraade" required>
+          <option value="">Vælg område</option>
+          {omraader.map((o) => <option value={o.key}>{o.label}</option>)}
+        </select>
+        <div id="omraade-uddyb-wrap" class="uddyb-wrap" hidden>
+          <label for="omraade_uddyb">Uddyb område</label>
+          <input id="omraade_uddyb" name="omraade_uddyb" type="text" />
+        </div>
+
+        <label for="niveau">Niveau</label>
+        <select id="niveau" name="niveau" required>
+          <option value="">Vælg spor først</option>
+        </select>
+
+        <fieldset class="bevis-fieldset">
+          <legend>Beviser</legend>
+          <p class="muted" style="margin-top:0;">Ja / nej / under uddannelse — listen følger dit spor.</p>
+          <div id="beviser-list"></div>
+        </fieldset>
+
+        <label for="start">Start</label>
+        <select id="start" name="start" required>
+          <option value="">Vælg start</option>
+          {start.map((s) => <option value={s.key}>{s.label}</option>)}
+        </select>
+
+        <label for="besked">Besked <span class="muted">(valgfrit)</span></label>
+        <textarea id="besked" name="besked" rows="3" placeholder="Noget vigtigt vi skal vide?"></textarea>
+
+        <div class="checkbox-row">
+          <input id="samtykke" name="samtykke" type="checkbox" required />
+          <label for="samtykke">Jeg giver samtykke til, at Match behandler mine oplysninger for at matche mig med virksomheder. Se <a href="/privatliv">privatlivspolitik</a>.</label>
+        </div>
+
+        <button class="btn btn-sol" type="submit">Send ansøgning</button>
+      </form>
+    </div>
+  </section>
+
+  <script define:vars={{ niveauer, beviser, bevisSvar }}>
+    const sporEl = document.getElementById('spor');
+    const niveauEl = document.getElementById('niveau');
+    const beviserList = document.getElementById('beviser-list');
+    const sporUddyb = document.getElementById('spor-uddyb-wrap');
+    const omraadeEl = document.getElementById('omraade');
+    const omraadeUddyb = document.getElementById('omraade-uddyb-wrap');
+
+    function toggleAndet(selectEl, wrapEl, inputId) {
+      const isAndet = selectEl.value === 'andet';
+      wrapEl.hidden = !isAndet;
+      const input = document.getElementById(inputId);
+      if (input) input.required = isAndet;
+      if (!isAndet && input) input.value = '';
+    }
+
+    function renderNiveau(sporKey) {
+      const list = niveauer[sporKey] || [];
+      niveauEl.innerHTML = '';
+      if (!sporKey || sporKey === 'andet') {
+        const opt = document.createElement('option');
+        opt.value = 'andet';
+        opt.textContent = sporKey === 'andet' ? 'Andet (uddyb ovenfor)' : 'Vælg spor først';
+        niveauEl.appendChild(opt);
+        niveauEl.required = sporKey !== 'andet';
+        if (sporKey === 'andet') niveauEl.value = 'andet';
+        return;
+      }
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.textContent = 'Vælg niveau';
+      niveauEl.appendChild(placeholder);
+      list.forEach((n) => {
+        const opt = document.createElement('option');
+        opt.value = n.key;
+        opt.textContent = n.label;
+        niveauEl.appendChild(opt);
+      });
+      niveauEl.required = true;
+    }
+
+    function renderBeviser(sporKey) {
+      beviserList.innerHTML = '';
+      const list = beviser[sporKey] || [];
+      if (!list.length) {
+        beviserList.innerHTML = '<p class="muted">Ingen faste beviser for dette spor.</p>';
+        return;
+      }
+      list.forEach((b) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'bevis-row';
+        const label = document.createElement('label');
+        label.setAttribute('for', `bevis_${b.key}`);
+        label.textContent = b.label;
+        const select = document.createElement('select');
+        select.id = `bevis_${b.key}`;
+        select.name = `bevis_${b.key}`;
+        select.required = true;
+        const empty = document.createElement('option');
+        empty.value = '';
+        empty.textContent = 'Vælg';
+        select.appendChild(empty);
+        bevisSvar.forEach((s) => {
+          const opt = document.createElement('option');
+          opt.value = s.key;
+          opt.textContent = s.label;
+          select.appendChild(opt);
+        });
+        wrap.appendChild(label);
+        wrap.appendChild(select);
+        beviserList.appendChild(wrap);
+      });
+    }
+
+    function onSporChange() {
+      const key = sporEl.value;
+      toggleAndet(sporEl, sporUddyb, 'spor_uddyb');
+      renderNiveau(key);
+      renderBeviser(key);
+    }
+
+    sporEl?.addEventListener('change', onSporChange);
+    omraadeEl?.addEventListener('change', () => toggleAndet(omraadeEl, omraadeUddyb, 'omraade_uddyb'));
+
+    document.querySelector('form[data-flow="vikar"]')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      window.location.href = '/tak?fra=vikar';
+    });
+  </script>
+</Layout>

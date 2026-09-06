@@ -1,0 +1,46 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { jobs, getJob } from '../../data/jobs';
+
+export function getStaticPaths() {
+  return jobs.map((job) => ({ params: { slug: job.slug } }));
+}
+
+const { slug } = Astro.params;
+const job = getJob(slug!);
+if (!job) {
+  return Astro.redirect('/jobs');
+}
+---
+<Layout title={`${job.title} — Match`} description={`${job.omraadeLabel} · ${job.niveauLabel}. Eksempel-opslag.`}>
+  <section class="page-hero">
+    <div class="container">
+      <p class="job-detail-badges">
+        {job.status === 'example' && <span class="badge badge-example">Eksempel</span>}
+        {job.status === 'live' && <span class="badge badge-live">Live</span>}
+        <span style="opacity:0.75; margin-left:0.5rem;">{job.omraadeLabel} · {job.spor.toUpperCase()}</span>
+      </p>
+      <h1>{job.title}</h1>
+      <p style="opacity:0.9;">{job.company} · {job.type} · Start: {job.start}</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container prose">
+      {job.status === 'example' && (
+        <div class="note">
+          Dette er et <strong>eksempel-opslag</strong> til at vise flowet. Ingen rigtig ansøgning her — opret dig, så vi kan matche dig.
+        </div>
+      )}
+      <h2>Om opgaven</h2>
+      <p>{job.beskrivelse}</p>
+      <p><strong>Varighed:</strong> {job.varighed}<br /><strong>Niveau:</strong> {job.niveauLabel}</p>
+      <h2>Krav</h2>
+      <ul>
+        {job.krav.map((k) => <li>{k}</li>)}
+      </ul>
+      <p style="margin-top:1.75rem;">
+        <a class="btn btn-sol" href="/opret/vikar">Opret dig</a>
+      </p>
+    </div>
+  </section>
+</Layout>

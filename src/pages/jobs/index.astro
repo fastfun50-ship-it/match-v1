@@ -1,0 +1,100 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { jobs, sortJobs } from '../../data/jobs';
+
+const sorted = sortJobs(jobs);
+---
+<Layout title="Jobs — Match" description="Se eksempel-jobs på Fyn og opret dig som vikar.">
+  <section class="page-hero">
+    <div class="container">
+      <h1>Jobs</h1>
+      <p style="opacity:0.9;">Eksempel-opslag på Fyn. Live jobs vises først, når de findes.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="filters" aria-label="Filtre">
+        <div>
+          <label for="fag">Spor</label>
+          <select id="fag" name="fag" data-filter="spor">
+            <option value="">Alle spor</option>
+            <option value="sosu">SOSU</option>
+            <option value="bygge">Bygge</option>
+          </select>
+        </div>
+        <div>
+          <label for="omraade">Område</label>
+          <select id="omraade" name="omraade" data-filter="omraade">
+            <option value="">Alle områder</option>
+            <option value="fyn">Fyn</option>
+          </select>
+        </div>
+        <div>
+          <label for="type">Type</label>
+          <select id="type" name="type" data-filter="type">
+            <option value="">Alle</option>
+            <option value="Vikariat">Vikariat</option>
+            <option value="Projekt">Projekt</option>
+          </select>
+        </div>
+      </div>
+
+      <ul class="job-list" id="job-list">
+        {sorted.map((job) => (
+          <li
+            class="job-card"
+            data-spor={job.spor}
+            data-omraade={job.omraadeKey}
+            data-type={job.type}
+            data-status={job.status}
+          >
+            <div class="job-card__top">
+              {job.status === 'example' && <span class="badge badge-example">Eksempel</span>}
+              {job.status === 'live' && <span class="badge badge-live">Live</span>}
+              <span class="muted">{job.omraadeLabel} · {job.niveauLabel}</span>
+            </div>
+            <h2 class="job-card__title">
+              <a href={`/jobs/${job.slug}`}>{job.title}</a>
+            </h2>
+            <p class="job-card__meta muted">{job.company} · {job.type} · {job.start}</p>
+            <p class="job-card__cta">
+              <a class="btn btn-sol" href="/opret/vikar">Opret dig</a>
+              <a class="text-link" href={`/jobs/${job.slug}`}>Se detalje</a>
+            </p>
+          </li>
+        ))}
+      </ul>
+
+      <div class="empty-state" id="job-empty" hidden>
+        <h2>Ingen jobs matcher filtrene</h2>
+        <p class="muted">Prøv et andet filter — eller opret dig, så vi kan matche dig.</p>
+        <p style="margin-top:1.25rem;">
+          <a class="btn btn-sol" href="/opret/vikar">Opret dig</a>
+        </p>
+      </div>
+    </div>
+  </section>
+  <script>
+    const list = document.getElementById('job-list');
+    const empty = document.getElementById('job-empty');
+    const filters = document.querySelectorAll('[data-filter]');
+
+    function apply() {
+      const vals = {};
+      filters.forEach((el) => { vals[el.getAttribute('data-filter')] = el.value; });
+      let visible = 0;
+      list.querySelectorAll('.job-card').forEach((card) => {
+        const ok =
+          (!vals.spor || card.dataset.spor === vals.spor) &&
+          (!vals.omraade || card.dataset.omraade === vals.omraade) &&
+          (!vals.type || card.dataset.type === vals.type);
+        card.hidden = !ok;
+        if (ok) visible += 1;
+      });
+      empty.hidden = visible > 0;
+      list.hidden = visible === 0;
+    }
+
+    filters.forEach((el) => el.addEventListener('change', apply));
+  </script>
+</Layout>
