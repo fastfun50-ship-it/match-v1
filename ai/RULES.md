@@ -83,6 +83,7 @@ Full text: STANDARD.md §2c.
 - Note: `docs/site-rules.md` "Prove it works" asks for preview URL + screenshots 375/1280 of the changed flow — this repo rule overrides the general "no screenshots unless asked" for this repo.
 
 ## 4. Deploy / branches
+- **One development line (default, STANDARD.md §9a):** one active development line → one version we test → one deployment we keep building on. Do not spread an ordinary task over several branches/environments on your own. Preview/staging only when this repo has real customers/data or Peter asks - and then it is written here as a project override.
 - Default branch `main` (single commit). No deploy configured.
 
 ## 5. ARCHITECTURE/PRODUCT DECISION REQUIRED
